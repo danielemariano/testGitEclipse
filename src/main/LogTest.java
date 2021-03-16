@@ -2,6 +2,7 @@ package main;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.LogCommand;
@@ -17,24 +18,24 @@ import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 public class LogTest {
 	
 	private static final String workDir = "/Users/danielemariano/Desktop/test";
-
+	private static final String gitHubWorkDir = "https://github.com/danielemariano/testGitEclipse";
+	
 	public static void main(String[] args) {
 		Git git = cloneRepo();
-		
-		/*try {
+		try {
 			openRepository();
 		} catch (IOException e) {
 			e.printStackTrace();
-		}*/
-		
+		}
 		printLog(git);
 	}
 
+	// Funzione per copiare in locale (in workDir) la repository remota (in gitHubWorkDir) 
 	private static Git cloneRepo() {
 		try {
 			Git git=Git.cloneRepository()
-			        .setURI("https://github.com/danielemariano/testGitEclipse")
-			        .setDirectory(new File("/Users/danielemariano/Desktop/test"))
+			        .setURI(gitHubWorkDir)
+			        .setDirectory(new File(workDir))
 			        .call();
 			
 			return git;
@@ -49,23 +50,31 @@ public class LogTest {
 		return null;
 	}
 	
+	// Funzione che apre la repository creata in locale per prendere alcune info
 	private static Repository openRepository() throws IOException {
 	    FileRepositoryBuilder builder = new FileRepositoryBuilder();
 
-	    Repository repository = builder.setGitDir(new File("/Users/danielemariano/Desktop/test"))
-	            .readEnvironment() // scan environment GIT_* variables
-	            .findGitDir() // scan up the file system tree
+	    Repository repository = builder.setGitDir(new File(workDir))
+	            .readEnvironment()
+	            .findGitDir()
 	            .build();
 	     System.out.printf("Repository directory is {}", repository.getDirectory());
 
 	    return repository;
 	}
 	
+	// Funzione che stampa i messaggi di ogni commit
 	private static void printLog(Git git) {
 	    LogCommand log = git.log();
 	    try {
-			RevCommit com = log.call().iterator().next();
-			System.out.println(com.getFullMessage());
+	    	
+	    	Iterator<RevCommit> com = log.call().iterator();
+
+			while(com.hasNext()) {
+		         Object element = com.next();
+		         System.out.println(((RevCommit) element).getFullMessage());
+		      }
+			
 		} catch (NoHeadException e) {
 			e.printStackTrace();
 		} catch (GitAPIException e) {
