@@ -6,5 +6,12 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/Users/danielemariano/Desktop//org.eclipse.jgit-5.10.0.202012080955-r.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/danielemariano/Desktop//slf4j-api-1.7.2.jar"/>
+	<classpathentry kind="lib" path="/Users/danielemariano/Desktop//slf4j-jdk14-1.7.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
